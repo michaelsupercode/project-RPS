@@ -1,77 +1,103 @@
-ergebnisComputer = 0;
-ergebnisSpieler = 0;
+let uRes = document.getElementById('uRes')
+let cRes = document.getElementById('cRes')
+let print = document.getElementById('print')
+let roundShowRes = document.getElementById('roundShowRes')
+let roundMaxShow = document.getElementById('roundMaxShow')
+let roundShow = document.querySelector('.roundShow')
+let form = document.querySelector('form')
 
+let choices = ['stone', 'sheet', 'sciss']
+let rounds = 0
+let uScore = 0
+let cScore = 0
+let uChoice;
+let cChoice;
+let beater;
+let finish = false
 
-var display = function(text) {
-    var ausgabeParagraph = document.getElementById('ausgabe');
-    ausgabeParagraph.innerHTML = text + "<br>";
-    return;
-};
-
-var displayErgebnis = function(text) {
-    var ausgabeParagraph = document.getElementById('ergebnis');
-    ausgabeParagraph.innerHTML = text + "<br>";
-    return;
-};
-
-
-var vergleich = function(auswahlSpieler, auswahlComputer) {
-    auswahlSpieler = auswahlSpieler.toLowerCase().trim();
-    auswahlComputer = auswahlComputer.toLowerCase().trim();
-    if (auswahlSpieler === auswahlComputer) {
-        ergebnisComputer++;
-        ergebnisSpieler++;
-        return "Unentschieden!";
-    } else if (auswahlSpieler === "stein") {
-        if (auswahlComputer === "schere") {
-            ergebnisSpieler++;
-            return "Stein gewinnt";
-        } else {
-            ergebnisComputer++;
-            return "Papier gewinnt!";
-        }
-    } else if (auswahlSpieler === "papier") {
-        if (auswahlComputer === "stein") {
-            ergebnisSpieler++;
-            return "Papier gewinnt!";
-        } else {
-            ergebnisComputer++;
-            return "Schere gewinnt!";
-        }
-    } else if (auswahlSpieler === "schere") {
-        if (auswahlComputer === "stein") {
-            ergebnisComputer++;
-            return "Stein gewinnt!";
-        } else {
-            ergebnisSpieler++;
-            return "Schere gewinnt!";
-        }
-    } else {
-        return "Falsche Eingabe!?"
+function roundCheck() {
+    let round5 = document.getElementById('round5').checked
+    let round10 = document.getElementById('round10').checked
+    let round15 = document.getElementById('round15').checked
+    let round20 = document.getElementById('round20').checked
+    switch (true) {
+        case (round5):
+            rounds = 5;
+            break;
+        case (round10):
+            rounds = 10;
+            break;
+        case (round15):
+            rounds = 15;
+            break;
+        case (round20):
+            rounds = 20;
+            break;
     }
-};
+    form.setAttribute('style', 'display:none')
+    roundShow.setAttribute('style', 'display:unset')
+}
 
-var erzeugeComputerAuswahl = function() {
-    var zufallsZahl = Math.random();
-    if (zufallsZahl < 0.34) {
-        return "stein";
-    } else if (zufallsZahl <= 0.67) {
-        return "papier";
-    } else {
-        return "schere";
+function cGen() {
+    let cMoveIndex = Math.round(Math.random() * 2)
+    cChoice = choices[cMoveIndex]
+}
+
+function resultChecker(a, b, c) {
+    switch (a + b) {
+        case 'stonestone':
+        case 'sheetsheet':
+        case 'scisssciss':
+            beater = 'd';
+            print.innerHTML = 'draw !'
+            c.setAttribute('class', 'actResdraw')
+            break
+
+        case 'stonesciss':
+        case 'sheetstone':
+        case 'scisssheet':
+            beater = 'u';
+            uScore++
+            print.innerHTML = 'USER beats COMP. You won !'
+            c.setAttribute('class', 'actReswin')
+            break
+
+        case 'scissstone':
+        case 'stonesheet':
+        case 'sheetsciss':
+            c.setAttribute('class', 'actResloss')
+            beater = 'c';
+            cScore++
+            print.innerHTML = 'COMP beats USER. You lost !'
+            break
     }
-};
+}
 
-var spielen = function(spielerAuswahl) {
-    var meldung;
-    var ergebnis;
-    var computerAuswahl = erzeugeComputerAuswahl();
+let roundCounter = 1
+let signs = document.querySelector('.signs')
 
-    meldung = "Du hast " + spielerAuswahl.substr(0, 1).toUpperCase() + spielerAuswahl.substr(1) + " und der Computer hat " + computerAuswahl.substr(0, 1).toUpperCase() + computerAuswahl.substr(1) + ".\n";
-    meldung = meldung + vergleich(spielerAuswahl, computerAuswahl);
-    display(meldung);
+signs.addEventListener('click', (i) => {
+    let selected = i.srcElement
+    if (finish == false && rounds > 0) {
+        roundShowRes.innerHTML = roundCounter
+        roundMaxShow.innerHTML = rounds
+        roundCounter++
+        let uChoice = selected.id
+        cGen();
+        resultChecker(uChoice, cChoice, selected);
 
-    ergebnis = "user " + ergebnisSpieler + " :  " + ergebnisComputer + " pc ";
-    displayErgebnis(ergebnis);
-
-};
+        uRes.innerHTML = uScore
+        cRes.innerHTML = cScore
+        if (roundCounter == rounds + 1) {
+            finish = true
+            if (uScore > cScore) {
+                print.innerHTML = 'YOU WON'
+            } else if (uScore < cScore) {
+                print.innerHTML = 'YOU LOST'
+            }
+        }
+        setTimeout(() => (selected.classList.remove("actResdraw")), 770)
+        setTimeout(() => (selected.classList.remove("actReswin")), 770)
+        setTimeout(() => (selected.classList.remove("actResloss")), 770)
+    }
+})
