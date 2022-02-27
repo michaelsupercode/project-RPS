@@ -34,9 +34,9 @@ function roundCheck() {
             rounds = 20;
             break;
     }
-
-    roundShow.setAttribute('style', 'display:unset')
     form.setAttribute('style', 'display:none')
+    select.setAttribute('style', 'display:unset')
+
 }
 
 function cGen() {
