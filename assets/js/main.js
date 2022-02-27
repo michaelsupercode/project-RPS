@@ -3,7 +3,7 @@ let cRes = document.getElementById('cRes')
 let print = document.getElementById('print')
 let roundShowRes = document.getElementById('roundShowRes')
 let roundMaxShow = document.getElementById('roundMaxShow')
-let roundShow = document.querySelector('.roundShow')
+let select = document.querySelector('.select')
 let form = document.querySelector('form')
 
 let choices = ['stone', 'sheet', 'sciss']
@@ -34,8 +34,9 @@ function roundCheck() {
             rounds = 20;
             break;
     }
-    form.setAttribute('style', 'display:none')
+
     roundShow.setAttribute('style', 'display:unset')
+    form.setAttribute('style', 'display:none')
 }
 
 function cGen() {
@@ -50,7 +51,7 @@ function resultChecker(a, b, c) {
         case 'scisssciss':
             beater = 'd';
             print.innerHTML = 'draw !'
-            c.setAttribute('class', 'actResdraw')
+            c.setAttribute('class', 'resDraw')
             break
 
         case 'stonesciss':
@@ -59,13 +60,13 @@ function resultChecker(a, b, c) {
             beater = 'u';
             uScore++
             print.innerHTML = 'USER beats COMP. You won !'
-            c.setAttribute('class', 'actReswin')
+            c.setAttribute('class', 'resWin')
             break
 
         case 'scissstone':
         case 'stonesheet':
         case 'sheetsciss':
-            c.setAttribute('class', 'actResloss')
+            c.setAttribute('class', 'resLoss')
             beater = 'c';
             cScore++
             print.innerHTML = 'COMP beats USER. You lost !'
@@ -74,9 +75,9 @@ function resultChecker(a, b, c) {
 }
 
 let roundCounter = 1
-let signs = document.querySelector('.signs')
+let mySigns = document.querySelector('.mySigns')
 
-signs.addEventListener('click', (i) => {
+mySigns.addEventListener('click', (i) => {
     let selected = i.srcElement
     if (finish == false && rounds > 0) {
         roundShowRes.innerHTML = roundCounter
@@ -96,8 +97,8 @@ signs.addEventListener('click', (i) => {
                 print.innerHTML = 'YOU LOST'
             }
         }
-        setTimeout(() => (selected.classList.remove("actResdraw")), 770)
-        setTimeout(() => (selected.classList.remove("actReswin")), 770)
-        setTimeout(() => (selected.classList.remove("actResloss")), 770)
+        setTimeout(() => (selected.classList.remove("resDraw")), 540)
+        setTimeout(() => (selected.classList.remove("resWin")), 540)
+        setTimeout(() => (selected.classList.remove("resLoss")), 540)
     }
 })
