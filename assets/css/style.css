@@ -10,7 +10,8 @@
 }
 
 body {
-    max-width: 1200px;
+    max-width: auto;
+    margin: 5vh;
     background-color: #302828;
 }
 
@@ -19,10 +20,10 @@ a {
 }
 
 h2 {
-    font-size: 20rem;
+    font-size: 5rem;
     color: #a7a4a4;
     background-color: white;
-    padding: 1.7%;
+    padding: .2%;
 }
 
 section {
